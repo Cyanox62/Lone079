@@ -31,7 +31,7 @@ namespace Lone079
 			{
 				ReferenceHub player = pList[0];
 				player.characterClassManager.SetClassID(scp079Respawns[rand.Next(scp079Respawns.Count)]);
-				player.playerStats.health /= 2;
+				player.playerStats.health = player.playerStats.maxHP / 2;
 				player.SetPosition(scp939pos);
 				player.Broadcast(10, "<i>You have been respawned as a random SCP with half health because all other SCPs have died.</i>", false);
 			}
