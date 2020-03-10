@@ -18,12 +18,14 @@ namespace Lone079
 
 			ev = new EventHandlers();
 
+			Events.WaitingForPlayersEvent += ev.OnWaitingForPlayers;
 			Events.RoundStartEvent += ev.OnRoundStart;
 			Events.PlayerDeathEvent += ev.OnPlayerDie;
 		}
 
 		public override void OnDisable()
 		{
+			Events.WaitingForPlayersEvent -= ev.OnWaitingForPlayers;
 			Events.RoundStartEvent -= ev.OnRoundStart;
 			Events.PlayerDeathEvent -= ev.OnPlayerDie;
 

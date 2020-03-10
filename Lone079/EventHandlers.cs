@@ -26,15 +26,24 @@ namespace Lone079
 		private IEnumerator<float> Check079()
 		{
 			yield return Timing.WaitForSeconds(1f);
-			List<ReferenceHub> pList = Player.GetHubs().Where(x => x.GetTeam() == Team.SCP && x.GetRole() != RoleType.Scp0492).ToList();
+			IEnumerable<ReferenceHub> enumerable = Player.GetHubs().Where(x => x.GetTeam() == Team.SCP);
+			if (!Configs.countZombies) enumerable = enumerable.Where(x => x.GetRole() != RoleType.Scp0492);
+			List<ReferenceHub> pList = enumerable.ToList(); 
 			if (pList.Count == 1 && pList[0].GetRole() == RoleType.Scp079)
 			{
 				ReferenceHub player = pList[0];
 				player.characterClassManager.SetClassID(scp079Respawns[rand.Next(scp079Respawns.Count)]);
-				player.playerStats.health = player.playerStats.maxHP / 2;
+				Log.Warn((player.playerStats.maxHP * (Configs.healthPercent / 100)).ToString());
+				Log.Warn(player.playerStats.maxHP.ToString() + " * (" + Configs.healthPercent.ToString() + " / 100)");
+				player.playerStats.health = player.playerStats.maxHP * (Configs.healthPercent / 100f);
 				player.SetPosition(scp939pos);
 				player.Broadcast(10, "<i>You have been respawned as a random SCP with half health because all other SCPs have died.</i>", false);
 			}
+		}
+
+		public void OnWaitingForPlayers()
+		{
+			Configs.ReloadConfigs();
 		}
 
 		public void OnRoundStart()
@@ -44,7 +53,10 @@ namespace Lone079
 
 		public void OnPlayerDie(ref PlayerDeathEvent ev)
 		{
-			Timing.RunCoroutine(Check079());
+			if (ev.Player.GetTeam() == Team.SCP)
+			{
+				Timing.RunCoroutine(Check079());
+			}
 		}
 	}
 }

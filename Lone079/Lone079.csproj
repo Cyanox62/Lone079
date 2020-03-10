@@ -66,6 +66,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configs.cs" />
     <Compile Include="EventHandlers.cs" />
     <Compile Include="Patch079.cs" />
     <Compile Include="Plugin.cs" />
