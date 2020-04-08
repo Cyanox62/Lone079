@@ -41,11 +41,13 @@
     <Reference Include="Assembly-CSharp_publicized">
       <HintPath>..\..\BrightPlugin-EXILED\BrightPlugin-EXILED\bin\Release\Assembly-CSharp_publicized.dll</HintPath>
     </Reference>
-    <Reference Include="EXILED">
-      <HintPath>..\..\..\..\Desktop\References\EXILED.dll</HintPath>
+    <Reference Include="EXILED, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\AppData\Roaming\EXILED\EXILED.dll</HintPath>
     </Reference>
-    <Reference Include="EXILED_Events">
-      <HintPath>..\..\..\..\Desktop\References\EXILED_Events.dll</HintPath>
+    <Reference Include="EXILED_Events, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\AppData\Roaming\Plugins\EXILED_Events.dll</HintPath>
     </Reference>
     <Reference Include="Mirror">
       <HintPath>D:\SteamLibrary\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Mirror.dll</HintPath>
