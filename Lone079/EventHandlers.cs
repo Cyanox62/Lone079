@@ -23,6 +23,13 @@ namespace Lone079
 			RoleType.Scp93989
 		};
 
+		private List<RoleType> scp079RespawnLocations = new List<RoleType>()
+		{
+			RoleType.Scp049,
+			RoleType.Scp096,
+			RoleType.Scp93953
+		};
+
 		private IEnumerator<float> Check079()
 		{
 			yield return Timing.WaitForSeconds(1f);
@@ -47,7 +54,7 @@ namespace Lone079
 
 		public void OnRoundStart()
 		{
-			Timing.CallDelayed(1f, () => scp939pos = GameObject.FindObjectOfType<SpawnpointManager>().GetRandomPosition(RoleType.Scp93953).transform.position);
+			Timing.CallDelayed(1f, () => scp939pos = GameObject.FindObjectOfType<SpawnpointManager>().GetRandomPosition(scp079RespawnLocations[rand.Next(scp079RespawnLocations.Count)]).transform.position);
 		}
 
 		public void OnPlayerDie(ref PlayerDeathEvent ev)
