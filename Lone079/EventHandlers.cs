@@ -39,10 +39,10 @@ namespace Lone079
 			if (pList.Count == 1 && pList[0].GetRole() == RoleType.Scp079)
 			{
 				ReferenceHub player = pList[0];
-				float health = !Configs.scaleWithLevel ? player.playerStats.maxHP * (Configs.healthPercent / 100f) : player.playerStats.maxHP * ((Configs.healthPercent + ((player.GetLevel() - 1) * 5)) / 100f);
+				int level = player.GetLevel();
 				player.characterClassManager.SetClassID(scp079Respawns[rand.Next(scp079Respawns.Count)]);
-				player.playerStats.health = health;
 				player.SetPosition(scp939pos);
+				player.playerStats.health = !Configs.scaleWithLevel ? player.playerStats.maxHP * (Configs.healthPercent / 100f) : player.playerStats.maxHP * ((Configs.healthPercent + ((level - 1) * 5)) / 100f);
 				player.Broadcast(10, "<i>You have been respawned as a random SCP with half health because all other SCPs have died.</i>", false);
 			}
 		}
