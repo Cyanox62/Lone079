@@ -21,6 +21,7 @@ namespace Lone079
 			Events.WaitingForPlayersEvent += ev.OnWaitingForPlayers;
 			Events.RoundStartEvent += ev.OnRoundStart;
 			Events.PlayerDeathEvent += ev.OnPlayerDie;
+			Events.PlayerLeaveEvent += ev.OnPlayerLeave;
 		}
 
 		public override void OnDisable()
@@ -28,6 +29,7 @@ namespace Lone079
 			Events.WaitingForPlayersEvent -= ev.OnWaitingForPlayers;
 			Events.RoundStartEvent -= ev.OnRoundStart;
 			Events.PlayerDeathEvent -= ev.OnPlayerDie;
+			Events.PlayerLeaveEvent -= ev.OnPlayerLeave;
 
 			harmonyInstance.UnpatchAll();
 

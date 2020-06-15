@@ -30,9 +30,9 @@ namespace Lone079
 			RoleType.Scp93953
 		};
 
-		private IEnumerator<float> Check079()
+		private IEnumerator<float> Check079(float delay = 1f)
 		{
-			yield return Timing.WaitForSeconds(1f);
+			yield return Timing.WaitForSeconds(delay);
 			IEnumerable<ReferenceHub> enumerable = Player.GetHubs().Where(x => x.GetTeam() == Team.SCP);
 			if (!Configs.countZombies) enumerable = enumerable.Where(x => x.GetRole() != RoleType.Scp0492);
 			List<ReferenceHub> pList = enumerable.ToList(); 
@@ -47,6 +47,11 @@ namespace Lone079
 			}
 		}
 
+		public void OnPlayerLeave(PlayerLeaveEvent ev)
+		{
+			if (ev.Player.GetTeam() == Team.SCP) Timing.RunCoroutine(Check079(3f));
+		}
+
 		public void OnWaitingForPlayers()
 		{
 			Configs.ReloadConfigs();
@@ -59,10 +64,7 @@ namespace Lone079
 
 		public void OnPlayerDie(ref PlayerDeathEvent ev)
 		{
-			if (ev.Player.GetTeam() == Team.SCP)
-			{
-				Timing.RunCoroutine(Check079());
-			}
+			if (ev.Player.GetTeam() == Team.SCP) Timing.RunCoroutine(Check079());
 		}
 	}
 }
