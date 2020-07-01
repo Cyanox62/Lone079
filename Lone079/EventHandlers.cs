@@ -32,18 +32,21 @@ namespace Lone079
 
 		private IEnumerator<float> Check079(float delay = 1f)
 		{
-			yield return Timing.WaitForSeconds(delay);
-			IEnumerable<ReferenceHub> enumerable = Player.GetHubs().Where(x => x.GetTeam() == Team.SCP);
-			if (!Configs.countZombies) enumerable = enumerable.Where(x => x.GetRole() != RoleType.Scp0492);
-			List<ReferenceHub> pList = enumerable.ToList(); 
-			if (pList.Count == 1 && pList[0].GetRole() == RoleType.Scp079)
+			if (Map.ActivatedGenerators != 5)
 			{
-				ReferenceHub player = pList[0];
-				int level = player.GetLevel();
-				player.characterClassManager.SetClassID(scp079Respawns[rand.Next(scp079Respawns.Count)]);
-				Timing.CallDelayed(1f, () =>player.SetPosition(scp939pos));
-				player.playerStats.health = !Configs.scaleWithLevel ? player.playerStats.maxHP * (Configs.healthPercent / 100f) : player.playerStats.maxHP * ((Configs.healthPercent + ((level - 1) * 5)) / 100f);
-				player.Broadcast(10, "<i>You have been respawned as a random SCP with half health because all other SCPs have died.</i>", false);
+				yield return Timing.WaitForSeconds(delay);
+				IEnumerable<ReferenceHub> enumerable = Player.GetHubs().Where(x => x.GetTeam() == Team.SCP);
+				if (!Configs.countZombies) enumerable = enumerable.Where(x => x.GetRole() != RoleType.Scp0492);
+				List<ReferenceHub> pList = enumerable.ToList();
+				if (pList.Count == 1 && pList[0].GetRole() == RoleType.Scp079)
+				{
+					ReferenceHub player = pList[0];
+					int level = player.GetLevel();
+					player.characterClassManager.SetClassID(scp079Respawns[rand.Next(scp079Respawns.Count)]);
+					Timing.CallDelayed(1f, () => player.SetPosition(scp939pos));
+					player.playerStats.health = !Configs.scaleWithLevel ? player.playerStats.maxHP * (Configs.healthPercent / 100f) : player.playerStats.maxHP * ((Configs.healthPercent + ((level - 1) * 5)) / 100f);
+					player.Broadcast(10, "<i>You have been respawned as a random SCP with half health because all other SCPs have died.</i>", false);
+				}
 			}
 		}
 
