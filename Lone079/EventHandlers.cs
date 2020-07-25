@@ -1,5 +1,5 @@
-﻿using EXILED;
-using EXILED.Extensions;
+﻿using Exiled.API.Features;
+using Exiled.Events.EventArgs;
 using MEC;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +13,13 @@ namespace Lone079
 
 		private Vector3 scp939pos;
 
+		private bool is106Contained;
+
 		private List<RoleType> scp079Respawns = new List<RoleType>()
 		{
 			RoleType.Scp049,
 			RoleType.Scp096,
 			RoleType.Scp106,
-			RoleType.Scp173,
 			RoleType.Scp93953,
 			RoleType.Scp93989
 		};
@@ -35,39 +36,42 @@ namespace Lone079
 			if (Map.ActivatedGenerators != 5)
 			{
 				yield return Timing.WaitForSeconds(delay);
-				IEnumerable<ReferenceHub> enumerable = Player.GetHubs().Where(x => x.GetTeam() == Team.SCP);
-				if (!Configs.countZombies) enumerable = enumerable.Where(x => x.GetRole() != RoleType.Scp0492);
-				List<ReferenceHub> pList = enumerable.ToList();
-				if (pList.Count == 1 && pList[0].GetRole() == RoleType.Scp079)
+				IEnumerable<Player> enumerable = Player.List.Where(x => x.Team == Team.SCP);
+				if (!Lone079.instance.Config.CountZombies) enumerable = enumerable.Where(x => x.Role != RoleType.Scp0492);
+				List<Player> pList = enumerable.ToList();
+				if (pList.Count == 1 && pList[0].Role == RoleType.Scp079)
 				{
-					ReferenceHub player = pList[0];
-					int level = player.GetLevel();
-					player.characterClassManager.SetClassID(scp079Respawns[rand.Next(scp079Respawns.Count)]);
-					Timing.CallDelayed(1f, () => player.SetPosition(scp939pos));
-					player.playerStats.health = !Configs.scaleWithLevel ? player.playerStats.maxHP * (Configs.healthPercent / 100f) : player.playerStats.maxHP * ((Configs.healthPercent + ((level - 1) * 5)) / 100f);
-					player.Broadcast(10, "<i>You have been respawned as a random SCP with half health because all other SCPs have died.</i>", false);
+					Player player = pList[0];
+					int level = player.Level;
+					RoleType role = scp079Respawns[rand.Next(scp079Respawns.Count)];
+					if (is106Contained && role == RoleType.Scp106) role = RoleType.Scp93953;
+					player.SetRole(role);
+					Timing.CallDelayed(1f, () => player.Position = scp939pos);
+					player.Health = !Lone079.instance.Config.ScaleWithLevel ? player.MaxHealth * (Lone079.instance.Config.HealthPercent / 100f) : player.MaxHealth * ((Lone079.instance.Config.HealthPercent + ((level - 1) * 5)) / 100f);
+					player.Broadcast(10, "<i>You have been respawned as a random SCP with half health because all other SCPs have died.</i>");
 				}
 			}
 		}
 
-		public void OnPlayerLeave(PlayerLeaveEvent ev)
+		public void OnPlayerLeave(LeftEventArgs ev)
 		{
-			if (ev.Player.GetTeam() == Team.SCP) Timing.RunCoroutine(Check079(3f));
-		}
-
-		public void OnWaitingForPlayers()
-		{
-			Configs.ReloadConfigs();
+			if (ev.Player.Team == Team.SCP) Timing.RunCoroutine(Check079(3f));
 		}
 
 		public void OnRoundStart()
 		{
 			Timing.CallDelayed(1f, () => scp939pos = GameObject.FindObjectOfType<SpawnpointManager>().GetRandomPosition(scp079RespawnLocations[rand.Next(scp079RespawnLocations.Count)]).transform.position);
+			is106Contained = false;
 		}
 
-		public void OnPlayerDie(ref PlayerDeathEvent ev)
+		public void OnPlayerDie(DiedEventArgs ev)
 		{
-			if (ev.Player.GetTeam() == Team.SCP) Timing.RunCoroutine(Check079());
+			if (ev.Target.Team == Team.SCP) Timing.RunCoroutine(Check079());
+		}
+
+		public void OnScp106Contain(ContainingEventArgs ev)
+		{
+			is106Contained = true;
 		}
 	}
 }
