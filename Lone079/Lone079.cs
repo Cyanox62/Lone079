@@ -24,7 +24,7 @@ namespace Lone079
 			ev = new EventHandlers();
 
 			Exiled.Events.Handlers.Server.RoundStarted += ev.OnRoundStart;
-			Exiled.Events.Handlers.Player.Died += ev.OnPlayerDie;
+			Exiled.Events.Handlers.Player.Dying += ev.OnPlayerDying;
 			Exiled.Events.Handlers.Player.Left += ev.OnPlayerLeave;
 			Exiled.Events.Handlers.Scp106.Containing += ev.OnScp106Contain;
 		}
@@ -34,7 +34,7 @@ namespace Lone079
 			base.OnDisabled();
 
 			Exiled.Events.Handlers.Server.RoundStarted -= ev.OnRoundStart;
-			Exiled.Events.Handlers.Player.Died -= ev.OnPlayerDie;
+			Exiled.Events.Handlers.Player.Dying -= ev.OnPlayerDying;
 			Exiled.Events.Handlers.Player.Left -= ev.OnPlayerLeave;
 			Exiled.Events.Handlers.Scp106.Containing -= ev.OnScp106Contain;
 

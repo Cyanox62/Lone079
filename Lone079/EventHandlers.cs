@@ -53,6 +53,7 @@ namespace Lone079
 			}
 		}
 
+		// no work
 		public void OnPlayerLeave(LeftEventArgs ev)
 		{
 			if (ev.Player.Team == Team.SCP) Timing.RunCoroutine(Check079(3f));
@@ -64,7 +65,7 @@ namespace Lone079
 			is106Contained = false;
 		}
 
-		public void OnPlayerDie(DiedEventArgs ev)
+		public void OnPlayerDying(DyingEventArgs ev)
 		{
 			if (ev.Target.Team == Team.SCP) Timing.RunCoroutine(Check079());
 		}
