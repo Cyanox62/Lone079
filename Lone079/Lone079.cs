@@ -12,6 +12,8 @@ namespace Lone079
 
 		public override void OnEnabled()
 		{
+			base.OnEnabled();
+
 			if (!Config.IsEnabled) return;
 
 			instance = this;
@@ -29,6 +31,8 @@ namespace Lone079
 
 		public override void OnDisabled()
 		{
+			base.OnDisabled();
+
 			Exiled.Events.Handlers.Server.RoundStarted -= ev.OnRoundStart;
 			Exiled.Events.Handlers.Player.Died -= ev.OnPlayerDie;
 			Exiled.Events.Handlers.Player.Left -= ev.OnPlayerLeave;
