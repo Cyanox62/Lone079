@@ -13,7 +13,7 @@ namespace Lone079
 
 		private Vector3 scp939pos;
 
-		private bool is106Contained;
+		private bool is106Contained, canChange;
 
 		private List<RoleType> scp079Respawns = new List<RoleType>()
 		{
@@ -33,7 +33,7 @@ namespace Lone079
 
 		private IEnumerator<float> Check079(float delay = 1f)
 		{
-			if (Map.ActivatedGenerators != 5)
+			if (Map.ActivatedGenerators != 5 && canChange)
 			{
 				yield return Timing.WaitForSeconds(delay);
 				IEnumerable<Player> enumerable = Player.List.Where(x => x.Team == Team.SCP);
@@ -59,13 +59,16 @@ namespace Lone079
 			if (ev.Player.Team == Team.SCP) Timing.RunCoroutine(Check079(3f));
 		}
 
+		public void OnDetonated() => canChange = false;
+
 		public void OnRoundStart()
 		{
 			Timing.CallDelayed(1f, () => scp939pos = GameObject.FindObjectOfType<SpawnpointManager>().GetRandomPosition(scp079RespawnLocations[rand.Next(scp079RespawnLocations.Count)]).transform.position);
 			is106Contained = false;
+			canChange = true;
 		}
 
-		public void OnPlayerDying(DyingEventArgs ev)
+		public void OnPlayerDied(DiedEventArgs ev)
 		{
 			if (ev.Target.Team == Team.SCP) Timing.RunCoroutine(Check079());
 		}

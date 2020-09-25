@@ -24,9 +24,10 @@ namespace Lone079
 			ev = new EventHandlers();
 
 			Exiled.Events.Handlers.Server.RoundStarted += ev.OnRoundStart;
-			Exiled.Events.Handlers.Player.Dying += ev.OnPlayerDying;
+			Exiled.Events.Handlers.Player.Died += ev.OnPlayerDied;
 			Exiled.Events.Handlers.Player.Left += ev.OnPlayerLeave;
 			Exiled.Events.Handlers.Scp106.Containing += ev.OnScp106Contain;
+			Exiled.Events.Handlers.Warhead.Detonated += ev.OnDetonated;
 		}
 
 		public override void OnDisabled()
@@ -34,9 +35,10 @@ namespace Lone079
 			base.OnDisabled();
 
 			Exiled.Events.Handlers.Server.RoundStarted -= ev.OnRoundStart;
-			Exiled.Events.Handlers.Player.Dying -= ev.OnPlayerDying;
+			Exiled.Events.Handlers.Player.Died -= ev.OnPlayerDied;
 			Exiled.Events.Handlers.Player.Left -= ev.OnPlayerLeave;
 			Exiled.Events.Handlers.Scp106.Containing -= ev.OnScp106Contain;
+			Exiled.Events.Handlers.Warhead.Detonated -= ev.OnDetonated;
 
 			hInstance.UnpatchAll();
 
