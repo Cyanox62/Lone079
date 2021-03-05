@@ -70,7 +70,8 @@ namespace Lone079
 
 		public void OnPlayerDied(DiedEventArgs ev)
 		{
-			if (ev.Target.Team == Team.SCP) Timing.RunCoroutine(Check079());
+			//if (ev.Target.Team == Team.SCP) Timing.RunCoroutine(Check079(3f));
+			Timing.RunCoroutine(Check079(3f));
 		}
 
 		public void OnScp106Contain(ContainingEventArgs ev)
