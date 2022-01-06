@@ -33,7 +33,7 @@ namespace Lone079
 
 		private IEnumerator<float> Check079(float delay = 1f)
 		{
-			if (Map.ActivatedGenerators != 5 && canChange)
+			if (Map.ActivatedGenerators != 3 && canChange)
 			{
 				yield return Timing.WaitForSeconds(delay);
 				IEnumerable<Player> enumerable = Player.List.Where(x => x.Team == Team.SCP);
@@ -63,7 +63,7 @@ namespace Lone079
 
 		public void OnRoundStart()
 		{
-			Timing.CallDelayed(1f, () => scp939pos = GameObject.FindObjectOfType<SpawnpointManager>().GetRandomPosition(scp079RespawnLocations[rand.Next(scp079RespawnLocations.Count)]).transform.position);
+			Timing.CallDelayed(1f, () => scp939pos = SpawnpointManager.GetRandomPosition(scp079RespawnLocations[rand.Next(scp079RespawnLocations.Count)]).transform.position);
 			is106Contained = false;
 			canChange = true;
 		}
@@ -77,6 +77,11 @@ namespace Lone079
 		public void OnScp106Contain(ContainingEventArgs ev)
 		{
 			is106Contained = true;
+		}
+
+		public void OnCassie(SendingCassieMessageEventArgs ev)
+		{
+			if (ev.Words.Contains("allgeneratorsengaged")) ev.IsAllowed = false;
 		}
 	}
 }
