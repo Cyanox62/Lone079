@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs;
 using MEC;
 using System.Collections.Generic;
@@ -33,16 +34,16 @@ namespace Lone079
 
 		private IEnumerator<float> Check079(float delay = 1f)
 		{
-			if (Map.ActivatedGenerators != 3 && canChange)
+			if (Generator.List.Where(x => x.IsEngaged).Count() != 3 && canChange)
 			{
 				yield return Timing.WaitForSeconds(delay);
-				IEnumerable<Player> enumerable = Player.List.Where(x => x.Team == Team.SCP);
+				IEnumerable<Player> enumerable = Player.Get(Team.SCP);
 				if (!Lone079.instance.Config.CountZombies) enumerable = enumerable.Where(x => x.Role != RoleType.Scp0492);
 				List<Player> pList = enumerable.ToList();
 				if (pList.Count == 1 && pList[0].Role == RoleType.Scp079)
 				{
 					Player player = pList[0];
-					int level = player.Level;
+					int level = player.Role.As<Scp079Role>().Level;
 					RoleType role = scp079Respawns[rand.Next(scp079Respawns.Count)];
 					if (is106Contained && role == RoleType.Scp106) role = RoleType.Scp93953;
 					player.SetRole(role);
@@ -56,7 +57,7 @@ namespace Lone079
 		// no work
 		public void OnPlayerLeave(LeftEventArgs ev)
 		{
-			if (ev.Player.Team == Team.SCP) Timing.RunCoroutine(Check079(3f));
+			if (ev.Player.Role.Team == Team.SCP) Timing.RunCoroutine(Check079(3f));
 		}
 
 		public void OnDetonated() => canChange = false;
