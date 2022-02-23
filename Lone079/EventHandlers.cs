@@ -15,6 +15,7 @@ namespace Lone079
 		private Vector3 scp939pos;
 
 		private bool is106Contained, canChange;
+		internal static bool isLastAlive;
 
 		private List<RoleType> scp079Respawns = new List<RoleType>()
 		{
@@ -34,14 +35,17 @@ namespace Lone079
 
 		private IEnumerator<float> Check079(float delay = 1f)
 		{
-			if (Generator.List.Where(x => x.IsEngaged).Count() != 3 && canChange)
+			if (canChange)
 			{
 				yield return Timing.WaitForSeconds(delay);
 				IEnumerable<Player> enumerable = Player.Get(Team.SCP);
+				Log.Warn(enumerable.Count());
 				if (!Lone079.instance.Config.CountZombies) enumerable = enumerable.Where(x => x.Role != RoleType.Scp0492);
 				List<Player> pList = enumerable.ToList();
+				Log.Warn(pList.Count);
 				if (pList.Count == 1 && pList[0].Role == RoleType.Scp079)
 				{
+					isLastAlive = true;
 					Player player = pList[0];
 					int level = player.Role.As<Scp079Role>().Level;
 					RoleType role = scp079Respawns[rand.Next(scp079Respawns.Count)];
@@ -67,6 +71,7 @@ namespace Lone079
 			Timing.CallDelayed(1f, () => scp939pos = SpawnpointManager.GetRandomPosition(scp079RespawnLocations[rand.Next(scp079RespawnLocations.Count)]).transform.position);
 			is106Contained = false;
 			canChange = true;
+			isLastAlive = false;
 		}
 
 		public void OnPlayerDied(DiedEventArgs ev)
@@ -82,7 +87,7 @@ namespace Lone079
 
 		public void OnCassie(SendingCassieMessageEventArgs ev)
 		{
-			if (ev.Words.Contains("allgeneratorsengaged")) ev.IsAllowed = false;
+			if (ev.Words.Contains("allgeneratorsengaged") && isLastAlive) ev.IsAllowed = false;
 		}
 	}
 }
