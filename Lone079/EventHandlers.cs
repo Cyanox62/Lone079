@@ -39,10 +39,8 @@ namespace Lone079
 			{
 				yield return Timing.WaitForSeconds(delay);
 				IEnumerable<Player> enumerable = Player.Get(Team.SCP);
-				Log.Warn(enumerable.Count());
 				if (!Lone079.instance.Config.CountZombies) enumerable = enumerable.Where(x => x.Role != RoleType.Scp0492);
 				List<Player> pList = enumerable.ToList();
-				Log.Warn(pList.Count);
 				if (pList.Count == 1 && pList[0].Role == RoleType.Scp079)
 				{
 					isLastAlive = true;
